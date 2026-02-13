@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitacion Cumple Vane</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=DM+Serif+Text:opsz@9..40&family=Nunito:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="scene">
+    <div class="hero-layout">
+      <div class="poster-frame">
+        <section class="poster" aria-label="Invitacion de cumpleanos estilo collage">
+          <img class="layer sticker num3" src="imagenes/3.png" alt="Globo con numero tres" draggable="false">
+          <img class="layer sticker num0" src="imagenes/0.png" alt="Globo con numero cero" draggable="false">
+          <img class="layer sticker nina" src="imagenes/ni&#241;a.png" alt="Nina con sombrero de fiesta" draggable="false">
+
+          <img class="layer fondo" src="imagenes/fondo.png" alt="Fondo decorativo con flores y pastel" draggable="false">
+          <img class="layer sticker globos" src="imagenes/globos.png" alt="Ramo de globos rosas" draggable="false">
+          <img class="layer sticker beso" src="imagenes/beso.png" alt="Estampa de labios rosas" draggable="false">
+          <img class="layer sticker sorpresa" src="imagenes/mujer_sorprendida.png" alt="Mujer sorprendida" draggable="false">
+          <img class="layer sticker happy" src="imagenes/happy_birthday.png" alt="Texto birthday party estilo recortes" draggable="false">
+          <img class="layer sticker cartel" src="imagenes/cartel_30.png" alt="Cartel de treinta coqueta prospera" draggable="false">
+          <img class="layer sticker princess" src="imagenes/princess.png" alt="Nina vestida de princesa" draggable="false">
+          <img class="layer sticker corona" src="imagenes/ni&#241;a_corona.png" alt="Mujer con corona" draggable="false">
+          <img class="layer sticker anniston" src="imagenes/anniston.png" alt="Mujer brindando" draggable="false">
+        </section>
+      </div>
+
+      <aside class="side-stack">
+        <section class="card event-info-card" id="datos-evento">
+          <h2>Datos del evento</h2>
+          <p class="event-date">28 de febrero, 20:00 - &infin;</p>
+          <p class="event-place">La Tapera</p>
+          <p class="event-text">Recordar que es de disfraces, copate y trae el mejor disfraz para perrear toda la noche.</p>
+        </section>
+
+        <section class="card rsvp-card" id="confirmar">
+          <h2>Confirmar asistencia</h2>
+          <p class="card-copy">Deja tu nombre y te abrimos WhatsApp con el mensaje listo.</p>
+          <form id="rsvpForm" class="rsvp-form" data-whatsapp="5491112345678">
+            <label for="guestName">Nombre</label>
+            <input id="guestName" name="guestName" type="text" placeholder="Tu nombre" required>
+
+            <label for="guestsCount">Cantidad de personas</label>
+            <select id="guestsCount" name="guestsCount">
+              <option value="1">1 persona</option>
+              <option value="2">2 personas</option>
+              <option value="3">3 personas</option>
+              <option value="4">4 personas</option>
+              <option value="5+">5 o mas</option>
+            </select>
+
+            <label for="guestNote">Mensaje</label>
+            <textarea id="guestNote" name="guestNote" rows="3" placeholder="Ejemplo: Voy con mi hermana."></textarea>
+
+            <button type="submit">Enviar confirmacion</button>
+          </form>
+          <p class="hint">Tip: cambia el numero de WhatsApp en <code>data-whatsapp</code> si necesitas otro destino.</p>
+        </section>
+
+        <section class="card map-card" id="ubicacion">
+          <h2>Lugar</h2>
+          <p class="venue-name">La Tapera</p>
+          <p class="card-copy">Ubicacion del evento para llegar facil.</p>
+
+          <div class="map-wrap">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d826.0138578857014!2d-56.19699075511193!3d-34.09372039669266!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a0934584992fcb%3A0x7b6324c25eaa5d8d!2sLa%20Tapera!5e0!3m2!1ses-419!2suy!4v1770947531520!5m2!1ses-419!2suy" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+
+          <a class="map-link" href="https://www.google.com/maps/place/La+Tapera/@-34.0937204,-56.1969908,19z/data=!4m6!3m5!1s0x95a0934584992fcb:0x7b6324c25eaa5d8d!8m2!3d-34.0936092!4d-56.1969614!16s%2Fg%2F11t_ky2d7m?entry=ttu&g_ep=EgoyMDI2MDIxMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a>
+        </section>
+      </aside>
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
