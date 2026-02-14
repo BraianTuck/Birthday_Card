@@ -13,7 +13,7 @@
   <main class="scene">
     <div class="hero-layout">
       <section class="poster" aria-label="Invitacion de cumpleanos estilo collage">
-        <img class="layer fondo" src="section1_sin_30.png" alt="Fondo base del collage" draggable="false">
+        <img class="layer fondo" src="imagenes/section1_sin_30.png" alt="Fondo base del collage" draggable="false">
         <img class="layer sticker num3" src="imagenes/3.png" alt="Globo con numero tres" draggable="false">
         <img class="layer sticker num0" src="imagenes/0.png" alt="Globo con numero cero" draggable="false">
         <audio id="bgAudio" src="audio-cumple.mp3" preload="auto" autoplay muted playsinline loop></audio>
@@ -22,14 +22,14 @@
 
       <aside class="side-stack">
         <section class="card event-info-card" id="datos-evento">
-          <h2>Datos del evento</h2>
+          <h2><span class="section-icon" aria-hidden="true">&#128197;</span>Datos del evento</h2>
           <p class="event-date">28 de febrero, 21:00 HS</p>
           <p class="costume-banner">Fiesta de Disfrases</p>
           <p class="event-text">Copate y trae el mejor disfraz para perrear toda la noche.</p>
         </section>
 
         <section class="card rsvp-card" id="confirmar">
-          <h2>Confirmar asistencia</h2>
+          <h2><span class="section-icon" aria-hidden="true">&#9989;</span>Confirmar asistencia</h2>
           <p class="card-copy">Deja tu nombre y enviamos la respuesta directo al formulario.</p>
           <form
             id="rsvpForm"
@@ -48,7 +48,7 @@
             </select>
 
             <label for="guestNote">Mensaje</label>
-            <textarea id="guestNote" name="guestNote" rows="3" placeholder="Ejemplo: Voy con mi hermana."></textarea>
+            <textarea id="guestNote" name="guestNote" rows="3" placeholder="Poné acá tu mensaje divertido"></textarea>
 
             <button type="submit">Enviar confirmacion</button>
           </form>
@@ -56,7 +56,7 @@
         </section>
 
         <section class="card map-card" id="ubicacion">
-          <h2>Lugar</h2>
+          <h2><span class="section-icon" aria-hidden="true">&#128205;</span>Lugar</h2>
           <p class="venue-name">La Tapera</p>
           <p class="card-copy">Ubicacion del evento para llegar facil.</p>
 
@@ -74,7 +74,7 @@
     <div class="rsvp-popup__backdrop" data-popup-close></div>
     <div class="rsvp-popup__card" role="dialog" aria-modal="true" aria-labelledby="rsvpPopupTitle">
       <button type="button" class="rsvp-popup__close" aria-label="Cerrar mensaje" data-popup-close>x</button>
-      <p id="rsvpPopupMood" class="rsvp-popup__mood"></p>
+      <img id="rsvpPopupImage" class="rsvp-popup__image" alt="" hidden>
       <h3 id="rsvpPopupTitle" class="rsvp-popup__title"></h3>
       <p id="rsvpPopupText" class="rsvp-popup__text"></p>
       <button type="button" class="rsvp-popup__action" data-popup-close>Cerrar</button>

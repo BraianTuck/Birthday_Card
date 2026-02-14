@@ -121,11 +121,11 @@ if (rsvpForm) {
   const popup = document.getElementById("rsvpPopup");
   const popupTitle = document.getElementById("rsvpPopupTitle");
   const popupText = document.getElementById("rsvpPopupText");
-  const popupMood = document.getElementById("rsvpPopupMood");
+  const popupImage = document.getElementById("rsvpPopupImage");
   const popupCloseTriggers = popup ? popup.querySelectorAll("[data-popup-close]") : [];
 
-  const openPopup = (variant, title, text, mood) => {
-    if (!popup || !popupTitle || !popupText || !popupMood) {
+  const openPopup = (variant, title, text, imageSrc, imageAlt) => {
+    if (!popup || !popupTitle || !popupText || !popupImage) {
       return;
     }
 
@@ -133,7 +133,17 @@ if (rsvpForm) {
     popup.classList.add(`rsvp-popup--${variant}`);
     popupTitle.textContent = title;
     popupText.textContent = text;
-    popupMood.textContent = mood;
+
+    if (imageSrc) {
+      popupImage.src = `${imageSrc}?v=2`;
+      popupImage.alt = imageAlt || "";
+      popupImage.hidden = false;
+    } else {
+      popupImage.hidden = true;
+      popupImage.removeAttribute("src");
+      popupImage.alt = "";
+    }
+
     popup.removeAttribute("hidden");
   };
 
@@ -165,7 +175,7 @@ if (rsvpForm) {
     const entryNote = rsvpForm.dataset.entryNote || "";
 
     if (!formAction || !entryName || !entryAttendance || !entryNote) {
-      openPopup("error", "Ups", "Falta configurar los identificadores del formulario de Google.", "!");
+      openPopup("error", "Ups", "Falta configurar los identificadores del formulario de Google.");
       return;
     }
 
@@ -193,12 +203,12 @@ if (rsvpForm) {
       rsvpForm.reset();
 
       if (attendance === "Si") {
-        openPopup("happy", "Siiii", `${name || "Genia"}! Te esperamos para romper la pista.`, ":)");
+        openPopup("happy", "Siiii", `${name || "Genia"}! Te esperamos para romper la pista.`, "imagenes/Si.png", "Confirmacion positiva");
       } else {
-        openPopup("sad", "Ayy no", `${name || "Que pena"}... te vamos a extranar un monton.`, ":(");
+        openPopup("sad", "Ayy no", `${name || "Que pena"}... te vamos a extrañar un montón.`, "imagenes/No.png", "Confirmacion negativa");
       }
     } catch (error) {
-      openPopup("error", "No se pudo enviar", "Intenta de nuevo en un rato.", "!");
+      openPopup("error", "No se pudo enviar", "Intenta de nuevo en un rato.");
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
@@ -207,4 +217,3 @@ if (rsvpForm) {
     }
   });
 }
-
