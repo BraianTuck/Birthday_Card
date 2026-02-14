@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -16,31 +16,35 @@
         <img class="layer fondo" src="section1_sin_30.png" alt="Fondo base del collage" draggable="false">
         <img class="layer sticker num3" src="imagenes/3.png" alt="Globo con numero tres" draggable="false">
         <img class="layer sticker num0" src="imagenes/0.png" alt="Globo con numero cero" draggable="false">
+        <audio id="bgAudio" src="audio-cumple.mp3" preload="auto" autoplay muted playsinline loop></audio>
+        <button id="musicToggle" class="music-toggle" type="button" aria-label="Reproducir musica">Play musica</button>
       </section>
 
       <aside class="side-stack">
         <section class="card event-info-card" id="datos-evento">
           <h2>Datos del evento</h2>
-          <p class="event-date">28 de febrero, 20:00 - &infin;</p>
+          <p class="event-date">28 de febrero, 21:00 HS</p>
           <p class="costume-banner">Fiesta de Disfrases</p>
-          <p class="event-place">La Tapera</p>
-          <p class="event-text">Recordar que es de disfraces, copate y trae el mejor disfraz para perrear toda la noche.</p>
+          <p class="event-text">Copate y trae el mejor disfraz para perrear toda la noche.</p>
         </section>
 
         <section class="card rsvp-card" id="confirmar">
           <h2>Confirmar asistencia</h2>
-          <p class="card-copy">Deja tu nombre y te abrimos WhatsApp con el mensaje listo.</p>
-          <form id="rsvpForm" class="rsvp-form" data-whatsapp="5491112345678">
+          <p class="card-copy">Deja tu nombre y enviamos la respuesta directo al formulario.</p>
+          <form
+            id="rsvpForm"
+            class="rsvp-form"
+            data-form-action="https://docs.google.com/forms/d/e/1FAIpQLSd0SC8fOkjfTJYXOxGX5WZ84uDnUM_SQbt0JGOrwpYEcAN0kQ/formResponse"
+            data-entry-name="entry.469026367"
+            data-entry-attendance="entry.967123086"
+            data-entry-note="entry.132387428">
             <label for="guestName">Nombre</label>
             <input id="guestName" name="guestName" type="text" placeholder="Tu nombre" required>
 
-            <label for="guestsCount">Cantidad de personas</label>
-            <select id="guestsCount" name="guestsCount">
-              <option value="1">1 persona</option>
-              <option value="2">2 personas</option>
-              <option value="3">3 personas</option>
-              <option value="4">4 personas</option>
-              <option value="5+">5 o mas</option>
+            <label for="attendance">Asistire</label>
+            <select id="attendance" name="attendance">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
             </select>
 
             <label for="guestNote">Mensaje</label>
@@ -48,7 +52,7 @@
 
             <button type="submit">Enviar confirmacion</button>
           </form>
-          <p class="hint">Tip: cambia el numero de WhatsApp en <code>data-whatsapp</code> si necesitas otro destino.</p>
+          <p class="hint">La confirmacion se guarda sin salir de esta pagina.</p>
         </section>
 
         <section class="card map-card" id="ubicacion">
@@ -65,6 +69,19 @@
       </aside>
     </div>
   </main>
+
+  <div id="rsvpPopup" class="rsvp-popup" hidden>
+    <div class="rsvp-popup__backdrop" data-popup-close></div>
+    <div class="rsvp-popup__card" role="dialog" aria-modal="true" aria-labelledby="rsvpPopupTitle">
+      <button type="button" class="rsvp-popup__close" aria-label="Cerrar mensaje" data-popup-close>x</button>
+      <p id="rsvpPopupMood" class="rsvp-popup__mood"></p>
+      <h3 id="rsvpPopupTitle" class="rsvp-popup__title"></h3>
+      <p id="rsvpPopupText" class="rsvp-popup__text"></p>
+      <button type="button" class="rsvp-popup__action" data-popup-close>Cerrar</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
+
