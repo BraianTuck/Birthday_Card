@@ -4,7 +4,8 @@ const musicToggle = document.getElementById("musicToggle");
 if (bgAudio && musicToggle) {
   bgAudio.volume = 0.9;
   bgAudio.loop = false;
-  bgAudio.playsInline = true;
+  bgAudio.setAttribute("playsinline", "");
+  bgAudio.setAttribute("webkit-playsinline", "");
   let initialPlayDone = false;
 
   const setMusicState = (isPlaying) => {
@@ -13,57 +14,74 @@ if (bgAudio && musicToggle) {
     musicToggle.setAttribute("aria-label", isPlaying ? "Pausar musica" : "Reproducir musica");
   };
 
-  const playMusic = async () => {
-    try {
-      await bgAudio.play();
-      setMusicState(true);
-      return true;
-    } catch (error) {
-      setMusicState(false);
-      return false;
-    }
-  };
-
-  // Eliminar los listeners de interacción una vez que el audio arrancó
-  const interactionEvents = ["click", "touchstart", "scroll", "keydown"];
+  // Chrome Android necesita estos eventos específicos como gesto válido
+  const interactionEvents = ["click", "touchend", "pointerup", "keydown"];
 
   const removeInteractionListeners = () => {
     interactionEvents.forEach((evt) =>
-      document.removeEventListener(evt, onFirstInteraction, { capture: true }),
+      document.removeEventListener(evt, onFirstInteraction, true),
     );
   };
 
-  // Si el navegador bloqueó el autoplay, reproducir con la primera interacción
-  const onFirstInteraction = async () => {
+  const addInteractionListeners = () => {
+    interactionEvents.forEach((evt) =>
+      document.addEventListener(evt, onFirstInteraction, true),
+    );
+  };
+
+  // Reproducir directamente sin async/await para no perder el gesto del usuario
+  const onFirstInteraction = (e) => {
     if (initialPlayDone) {
       removeInteractionListeners();
       return;
     }
+
+    // Ignorar si el click fue en el botón de música (tiene su propio handler)
+    if (e && e.target && e.target.closest && e.target.closest("#musicToggle")) {
+      return;
+    }
+
     initialPlayDone = true;
     removeInteractionListeners();
-    await playMusic();
+
+    // Usar .play() con .then()/.catch() directo (NO async/await)
+    // para mantener la cadena del gesto de usuario en Chrome Android
+    bgAudio.play()
+      .then(() => {
+        setMusicState(true);
+      })
+      .catch(() => {
+        // Si aún falla, reintentar en el siguiente gesto
+        initialPlayDone = false;
+        addInteractionListeners();
+        setMusicState(false);
+      });
   };
 
-  const tryAutoplay = async () => {
+  const tryAutoplay = () => {
     if (initialPlayDone) return;
 
-    const played = await playMusic();
-    if (played) {
-      // El navegador permitió autoplay, ya no necesitamos los listeners
-      initialPlayDone = true;
-      removeInteractionListeners();
-    } else {
-      // Autoplay bloqueado: registrar listeners para la primera interacción
-      interactionEvents.forEach((evt) =>
-        document.addEventListener(evt, onFirstInteraction, { capture: true, once: true }),
-      );
-    }
+    // Intentar reproducir automáticamente
+    bgAudio.play()
+      .then(() => {
+        initialPlayDone = true;
+        setMusicState(true);
+      })
+      .catch(() => {
+        // Autoplay bloqueado: esperar al primer gesto del usuario
+        setMusicState(false);
+        addInteractionListeners();
+      });
   };
 
-  musicToggle.addEventListener("click", async () => {
+  musicToggle.addEventListener("click", () => {
     if (bgAudio.paused) {
+      initialPlayDone = true;
+      removeInteractionListeners();
       bgAudio.muted = false;
-      await playMusic();
+      bgAudio.play()
+        .then(() => setMusicState(true))
+        .catch(() => setMusicState(false));
       return;
     }
 
@@ -74,7 +92,12 @@ if (bgAudio && musicToggle) {
   bgAudio.addEventListener("play", () => setMusicState(true));
   bgAudio.addEventListener("pause", () => setMusicState(false));
 
-  window.addEventListener("load", () => tryAutoplay(), { once: true });
+  // Intentar autoplay cuando la página termine de cargar
+  if (document.readyState === "complete") {
+    tryAutoplay();
+  } else {
+    window.addEventListener("load", tryAutoplay, { once: true });
+  }
 
   setMusicState(false);
 }
