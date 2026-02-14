@@ -3,17 +3,12 @@ const musicToggle = document.getElementById("musicToggle");
 
 if (bgAudio && musicToggle) {
   bgAudio.volume = 0.9;
-  bgAudio.autoplay = true;
+  bgAudio.loop = false;
   bgAudio.playsInline = true;
+  let initialPlayDone = false;
 
   const setMusicState = (isPlaying) => {
     musicToggle.classList.toggle("is-playing", isPlaying);
-    if (isPlaying && bgAudio.muted) {
-      musicToggle.textContent = "Activar sonido";
-      musicToggle.setAttribute("aria-label", "Activar sonido");
-      return;
-    }
-
     musicToggle.textContent = isPlaying ? "Pausar musica" : "Play musica";
     musicToggle.setAttribute("aria-label", isPlaying ? "Pausar musica" : "Reproducir musica");
   };
@@ -29,6 +24,42 @@ if (bgAudio && musicToggle) {
     }
   };
 
+  // Eliminar los listeners de interacción una vez que el audio arrancó
+  const interactionEvents = ["click", "touchstart", "scroll", "keydown"];
+
+  const removeInteractionListeners = () => {
+    interactionEvents.forEach((evt) =>
+      document.removeEventListener(evt, onFirstInteraction, { capture: true }),
+    );
+  };
+
+  // Si el navegador bloqueó el autoplay, reproducir con la primera interacción
+  const onFirstInteraction = async () => {
+    if (initialPlayDone) {
+      removeInteractionListeners();
+      return;
+    }
+    initialPlayDone = true;
+    removeInteractionListeners();
+    await playMusic();
+  };
+
+  const tryAutoplay = async () => {
+    if (initialPlayDone) return;
+
+    const played = await playMusic();
+    if (played) {
+      // El navegador permitió autoplay, ya no necesitamos los listeners
+      initialPlayDone = true;
+      removeInteractionListeners();
+    } else {
+      // Autoplay bloqueado: registrar listeners para la primera interacción
+      interactionEvents.forEach((evt) =>
+        document.addEventListener(evt, onFirstInteraction, { capture: true, once: true }),
+      );
+    }
+  };
+
   musicToggle.addEventListener("click", async () => {
     if (bgAudio.paused) {
       bgAudio.muted = false;
@@ -36,82 +67,16 @@ if (bgAudio && musicToggle) {
       return;
     }
 
-    if (bgAudio.muted) {
-      bgAudio.muted = false;
-      setMusicState(true);
-      return;
-    }
-
     bgAudio.pause();
+    setMusicState(false);
   });
 
   bgAudio.addEventListener("play", () => setMusicState(true));
   bgAudio.addEventListener("pause", () => setMusicState(false));
-  bgAudio.addEventListener("volumechange", () => setMusicState(!bgAudio.paused));
 
-  const enableOnFirstInteraction = () => {
-    const unlockAudio = () => {
-      bgAudio.muted = false;
-      playMusic();
-    };
-
-    document.addEventListener(
-      "pointerdown",
-      unlockAudio,
-      { once: true },
-    );
-
-    document.addEventListener(
-      "keydown",
-      unlockAudio,
-      { once: true },
-    );
-  };
-
-  const initAutoplay = async () => {
-    bgAudio.muted = false;
-    const started = await playMusic();
-    if (started) {
-      return;
-    }
-
-    bgAudio.muted = true;
-    await playMusic();
-
-    window.setTimeout(() => {
-      bgAudio.muted = false;
-      if (bgAudio.paused) {
-        playMusic();
-      }
-    }, 350);
-
-    enableOnFirstInteraction();
-  };
-
-  bgAudio.addEventListener(
-    "canplaythrough",
-    () => {
-      playMusic();
-    },
-    { once: true },
-  );
-
-  window.addEventListener(
-    "load",
-    () => {
-      playMusic();
-    },
-    { once: true },
-  );
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible" && bgAudio.paused) {
-      playMusic();
-    }
-  });
+  window.addEventListener("load", () => tryAutoplay(), { once: true });
 
   setMusicState(false);
-  initAutoplay();
 }
 
 const rsvpForm = document.getElementById("rsvpForm");
@@ -217,3 +182,4 @@ if (rsvpForm) {
     }
   });
 }
+
